@@ -5,12 +5,11 @@ package users
 import (
 	"fmt"
 
+	"github.com/istomin10593/bookstore_users-api/utils/date"
 	"github.com/istomin10593/bookstore_users-api/utils/errors"
 )
 
-var (
-	userDB = make(map[int64]*User)
-)
+var userDB map[int64]*User
 
 func (user *User) Get() *errors.RestErr {
 	result, err := userDB[user.Id]
@@ -35,6 +34,9 @@ func (user *User) Save() *errors.RestErr {
 		}
 		return errors.NewBadRequestError(fmt.Sprintf("user %d already exists", user.Id))
 	}
+
+	user.DateCreated = date.GetNowString()
+
 	userDB[user.Id] = user
 	return nil
 }

@@ -1,5 +1,7 @@
 package users
 
+// data access object
+
 import (
 	"fmt"
 

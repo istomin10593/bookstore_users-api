@@ -1,5 +1,7 @@
 package users
 
+// data transfer object
+
 import (
 	"strings"
 

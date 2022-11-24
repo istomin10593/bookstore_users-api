@@ -4,7 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
+
+	"github.com/istomin10593/bookstore_users-api/utils/env"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -19,10 +20,10 @@ const (
 var (
 	Client *sql.DB
 
-	username = os.Getenv(mysql_users_username)
-	password = os.Getenv(mysql_users_password)
-	host     = os.Getenv(mysql_users_host)
-	schema   = os.Getenv(mysql_users_schema)
+	username = env.GetEnvVariable(mysql_users_username)
+	password = env.GetEnvVariable(mysql_users_password)
+	host     = env.GetEnvVariable(mysql_users_host)
+	schema   = env.GetEnvVariable(mysql_users_schema)
 )
 
 func init() {

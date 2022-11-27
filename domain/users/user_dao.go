@@ -13,22 +13,26 @@ import (
 
 const (
 	indexUniqueEmail = "users.email"
+	errorNoRows      = "no rows in result set"
 	queryInsertUser  = "INSERT INTO users(first_name, last_name, email, date_created) VALUES(?, ?, ?, ?)"
+	queryGetUser     = " SELECT Id, first_name, last_name, email, date_created FROM users WHERE id=?"
 )
 
-var userDB = make(map[int64]*User)
-
 func (user *User) Get() *errors.RestErr {
-	result, err := userDB[user.Id]
-	if !err {
-		return errors.NewNotFoundError(fmt.Sprintf("user %d not found", user.Id))
-
+	stmt, err := users_db.Client.Prepare(queryGetUser)
+	if err != nil {
+		return errors.NewInternalServer(err.Error())
 	}
-	user.Id = result.Id
-	user.FirstName = result.FirstName
-	user.LastName = result.LastName
-	user.Email = result.Email
-	user.DateCreated = result.DateCreated
+	defer stmt.Close()
+
+	result := stmt.QueryRow(user.Id)
+	if err := result.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.DateCreated); err != nil {
+		if strings.Contains(err.Error(), errorNoRows) {
+			return errors.NewNotFoundError(
+				fmt.Sprintf("user %d not found", user.Id))
+		}
+		return errors.NewInternalServer(fmt.Sprintf("error when trying to get user %d, %s", user.Id, err.Error()))
+	}
 
 	return nil
 }

@@ -96,7 +96,3 @@ func Delete(c *gin.Context) {
 
 	c.JSON(http.StatusOK, map[string]string{"status": "deleted"})
 }
-
-// func SearchUser(c *gin.Context) {
-// 	c.String(http.StatusNotImplemented, "implement me!")
-// }

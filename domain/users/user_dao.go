@@ -3,6 +3,8 @@ package users
 // data access object
 
 import (
+	"fmt"
+
 	"github.com/istomin10593/bookstore_users-api/datasources/mysql/users_db"
 	"github.com/istomin10593/bookstore_users-api/utils/date"
 	"github.com/istomin10593/bookstore_users-api/utils/errors"
@@ -10,10 +12,11 @@ import (
 )
 
 const (
-	queryInsertUser = "INSERT INTO users(first_name, last_name, email, date_created) VALUES(?, ?, ?, ?);"
-	queryGetUser    = "SELECT Id, first_name, last_name, email, date_created FROM users WHERE id=?;"
-	quaryUpdateUser = "UPDATE users SET first_name=?, last_name=?, email=? WHERE id=?;"
-	quaryDeleteUser = "DELETE FROM users WHERE id=?;"
+	queryInsertUser       = "INSERT INTO users(first_name, last_name, email, date_created) VALUES(?, ?, ?, ?);"
+	queryGetUser          = "SELECT Id, first_name, last_name, email, date_created FROM users WHERE id=?;"
+	quaryUpdateUser       = "UPDATE users SET first_name=?, last_name=?, email=? WHERE id=?;"
+	quaryDeleteUser       = "DELETE FROM users WHERE id=?;"
+	quaryFindUserByStatus = "SELECT id, first_name, last_name, email, data_created, status FROM users WHERE status=?;"
 )
 
 func (user *User) Get() *errors.RestErr {
@@ -83,4 +86,33 @@ func (user *User) Delete() *errors.RestErr {
 	}
 
 	return nil
+}
+
+func (user *User) FindByStatus(status string) ([]User, *errors.RestErr) {
+	stmt, err := users_db.Client.Prepare(quaryFindUserByStatus)
+	if err != nil {
+		return nil, errors.NewInternalServerError(err.Error())
+	}
+	defer stmt.Close()
+
+	rows, err := stmt.Query(status)
+	if err != nil {
+		return nil, errors.NewInternalServerError(err.Error())
+	}
+	defer rows.Close()
+
+	results := make([]User, 0)
+	for rows.Next() {
+		var user User
+		if err := rows.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.DateCreated, &user.Status); err != nil {
+			return nil, mysql_utils.ParseError(err)
+		}
+		results = append(results, user)
+	}
+
+	if len(results) == 0 {
+		return nil, errors.NewNotFoundError(fmt.Sprintf("no users matching status %s", status))
+	}
+
+	return results, nil
 }

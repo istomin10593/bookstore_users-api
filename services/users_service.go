@@ -21,6 +21,7 @@ func CreateUser(user users.User) (*users.User, *errors.RestErr) {
 		return nil, err
 	}
 
+	user.Status = users.StatusActive
 	user.DateCreated = date.GetNowDBFormat()
 
 	if err := user.Save(); err != nil {

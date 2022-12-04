@@ -8,7 +8,6 @@ import (
 	"github.com/istomin10593/bookstore_users-api/datasources/mysql/users_db"
 	"github.com/istomin10593/bookstore_users-api/logger"
 	"github.com/istomin10593/bookstore_users-api/utils/errors"
-	"github.com/istomin10593/bookstore_users-api/utils/mysql_utils"
 )
 
 const (
@@ -30,7 +29,13 @@ func (user *User) Get() *errors.RestErr {
 
 	result := stmt.QueryRow(user.Id)
 
-	if getErr := result.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.DateCreated, &user.Status); getErr != nil {
+	if getErr := result.Scan(
+		&user.Id,
+		&user.FirstName,
+		&user.LastName,
+		&user.Email,
+		&user.DateCreated,
+		&user.Status); getErr != nil {
 		logger.Error("error when trying to get user by id", getErr)
 		return errors.NewInternalServerError("database error")
 	}
@@ -46,7 +51,13 @@ func (user *User) Save() *errors.RestErr {
 	}
 	defer stmt.Close()
 
-	insertResult, saveErr := stmt.Exec(user.FirstName, user.LastName, user.Email, user.DateCreated, user.Password, user.Status)
+	insertResult, saveErr := stmt.Exec(
+		user.FirstName,
+		user.LastName,
+		user.Email,
+		user.DateCreated,
+		user.Password,
+		user.Status)
 	if saveErr != nil {
 		logger.Error("error when trying to save user", saveErr)
 		return errors.NewInternalServerError("database error")
@@ -71,7 +82,11 @@ func (user *User) Update() *errors.RestErr {
 	}
 	defer stmt.Close()
 
-	_, updErr := stmt.Exec(user.FirstName, user.LastName, user.Email, user.Id)
+	_, updErr := stmt.Exec(
+		user.FirstName,
+		user.LastName,
+		user.Email,
+		user.Id)
 	if updErr != nil {
 		logger.Error("error when trying to update user", updErr)
 		return errors.NewInternalServerError("database error")
@@ -114,7 +129,13 @@ func (user *User) FindByStatus(status string) ([]User, *errors.RestErr) {
 	results := make([]User, 0)
 	for rows.Next() {
 		var user User
-		if err := rows.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.DateCreated, &user.Status); err != nil {
+		if err := rows.Scan(
+			&user.Id,
+			&user.FirstName,
+			&user.LastName,
+			&user.Email,
+			&user.DateCreated,
+			&user.Status); err != nil {
 			logger.Error("error when trying to scan user row into user struct", err)
 			return nil, errors.NewInternalServerError("database error")
 		}
@@ -129,7 +150,7 @@ func (user *User) FindByStatus(status string) ([]User, *errors.RestErr) {
 }
 
 func (user *User) FindByEmailAndPassword(status string) *errors.RestErr {
-	stmt, err := users_db.Client.Prepare(queryGetUser)
+	stmt, err := users_db.Client.Prepare(quaryFindByEmailAndPassword)
 	if err != nil {
 		logger.Error("error when trying to prepare get user by email and password statement", err)
 		return errors.NewInternalServerError("database error")
@@ -138,8 +159,15 @@ func (user *User) FindByEmailAndPassword(status string) *errors.RestErr {
 
 	result := stmt.QueryRow(user.Email, user.Password)
 
-	if getErr := result.Scan(&user.Id, &user.FirstName, &user.LastName, &user.Email, &user.DateCreated, &user.Status); getErr != nil {
-		return mysql_utils.ParseError(getErr)
+	if getErr := result.Scan(
+		&user.Id,
+		&user.FirstName,
+		&user.LastName,
+		&user.Email,
+		&user.DateCreated,
+		&user.Status); getErr != nil {
+		logger.Error("error when trying to get user by email and password", err)
+		return errors.NewInternalServerError("database error")
 	}
 
 	return nil

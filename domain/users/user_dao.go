@@ -4,10 +4,12 @@ package users
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/istomin10593/bookstore_users-api/datasources/mysql/users_db"
 	"github.com/istomin10593/bookstore_users-api/logger"
 	"github.com/istomin10593/bookstore_users-api/utils/errors"
+	"github.com/istomin10593/bookstore_users-api/utils/mysql_utils"
 )
 
 const (
@@ -16,7 +18,7 @@ const (
 	quaryUpdateUser             = "UPDATE users SET first_name=?, last_name=?, email=? WHERE id=?;"
 	quaryDeleteUser             = "DELETE FROM users WHERE id=?;"
 	quaryFindByStatus           = "SELECT id, first_name, last_name, email, date_created, status FROM users WHERE status=?;"
-	quaryFindByEmailAndPassword = "SELECT id, first_name, last_name, email, date_created, status FROM users WHERE email=? AND password=?;"
+	quaryFindByEmailAndPassword = "SELECT id, first_name, last_name, email, date_created, status FROM users WHERE email=? AND password=? AND status=?;"
 )
 
 func (user *User) Get() *errors.RestErr {
@@ -149,7 +151,7 @@ func (user *User) FindByStatus(status string) ([]User, *errors.RestErr) {
 	return results, nil
 }
 
-func (user *User) FindByEmailAndPassword(status string) *errors.RestErr {
+func (user *User) FindByEmailAndPassword() *errors.RestErr {
 	stmt, err := users_db.Client.Prepare(quaryFindByEmailAndPassword)
 	if err != nil {
 		logger.Error("error when trying to prepare get user by email and password statement", err)
@@ -157,7 +159,7 @@ func (user *User) FindByEmailAndPassword(status string) *errors.RestErr {
 	}
 	defer stmt.Close()
 
-	result := stmt.QueryRow(user.Email, user.Password)
+	result := stmt.QueryRow(user.Email, user.Password, StatusActive)
 
 	if getErr := result.Scan(
 		&user.Id,
@@ -166,7 +168,10 @@ func (user *User) FindByEmailAndPassword(status string) *errors.RestErr {
 		&user.Email,
 		&user.DateCreated,
 		&user.Status); getErr != nil {
-		logger.Error("error when trying to get user by email and password", err)
+		if strings.Contains(getErr.Error(), mysql_utils.ErrorNoRows) {
+			return errors.NewNotFoundError("invalid user credentials")
+		}
+		logger.Error("error when trying to get user by email and password", getErr)
 		return errors.NewInternalServerError("database error")
 	}
 

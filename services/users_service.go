@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/istomin10593/bookstore_users-api/domain/users"
+	"github.com/istomin10593/bookstore_users-api/logger"
 	"github.com/istomin10593/bookstore_users-api/utils/crypto_utils"
 	"github.com/istomin10593/bookstore_users-api/utils/date"
 	"github.com/istomin10593/bookstore_users-api/utils/errors"
@@ -40,7 +41,13 @@ func (s *usersService) CreateUser(user users.User) (*users.User, *errors.RestErr
 
 	user.Status = users.StatusActive
 	user.DateCreated = date.GetNowDBFormat()
-	user.Password = crypto_utils.GetMd5(user.Password)
+	password, err := crypto_utils.HashedValue(user.Password)
+	if err != nil {
+		logger.Error("error when trying to get hashed value", err)
+		restErr := errors.NewInternalServerError("database error")
+		return nil, restErr
+	}
+	user.Password = password
 
 	if err := user.Save(); err != nil {
 		return nil, err
@@ -91,9 +98,15 @@ func (s *usersService) SearchUser(status string) (users.Users, *errors.RestErr) 
 }
 
 func (s *usersService) LoginUser(request users.LoginRequest) (*users.User, *errors.RestErr) {
+	password, err := crypto_utils.HashedValue(request.Password)
+	if err != nil {
+		logger.Error("error when trying to get hashed value", err)
+		restErr := errors.NewInternalServerError("database error")
+		return nil, restErr
+	}
 	dao := &users.User{
 		Email:    request.Email,
-		Password: crypto_utils.GetMd5(request.Password),
+		Password: password,
 	}
 
 	if err := dao.FindByEmailAndPassword(); err != nil {

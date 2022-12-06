@@ -1,14 +1,11 @@
 package crypto_utils
 
-import (
-	"crypto/md5"
-	"encoding/hex"
-)
+import "golang.org/x/crypto/bcrypt"
 
-func GetMd5(input string) string {
-	hash := md5.New()
-	defer hash.Reset()
-
-	hash.Write([]byte(input))
-	return hex.EncodeToString(hash.Sum(nil))
+func HashedValue(input string) (string, error) {
+	bs, err := bcrypt.GenerateFromPassword([]byte(input), bcrypt.DefaultCost)
+	if err != nil {
+		return "", err
+	}
+	return string(bs), nil
 }

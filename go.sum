@@ -26,6 +26,8 @@ github.com/google/go-cmp v0.5.9/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeN
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/istomin10593/bookstore_oauth-go v0.0.0-20221207174836-5fc8115a10d1 h1:9BD4nhr+AVLSFF1NVE6Ip01Zuf6N8DWQYqy1ZYm5mmM=
 github.com/istomin10593/bookstore_oauth-go v0.0.0-20221207174836-5fc8115a10d1/go.mod h1:PbMRwjhlyH35ifIl3S5wFJz22YQO4bEfKRoQ6PV74C0=
+github.com/istomin10593/bookstore_utils-go v0.0.0-20221208134555-8699647191c1 h1:unkqVD3dkiZ4zNgoVtQ8bc3zoqIqBfHyQTMaS+ZtFVM=
+github.com/istomin10593/bookstore_utils-go v0.0.0-20221208134555-8699647191c1/go.mod h1:/0NwB6yWZquxmPmRRJsnGgYTitXAVZmEXZXGK0Ue/MU=
 github.com/joho/godotenv v1.4.0 h1:3l4+N6zfMWnkbPEXKng2o2/MR5mSwTrBih4ZEkkz1lg=
 github.com/joho/godotenv v1.4.0/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnrnM=

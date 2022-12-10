@@ -6,7 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/istomin10593/bookstore_oauth-go v0.0.0-20221207174836-5fc8115a10d1
-	github.com/istomin10593/bookstore_utils-go v0.0.0-20221208134555-8699647191c1
+	github.com/istomin10593/bookstore_utils-go v0.0.0-20221210145337-9cba49a4420d
 	github.com/joho/godotenv v1.4.0
 	golang.org/x/crypto v0.3.0
 )

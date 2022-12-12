@@ -3,11 +3,11 @@ package users_db
 import (
 	"database/sql"
 	"fmt"
-	"log"
 
 	"github.com/istomin10593/bookstore_users-api/utils/env"
+	"github.com/istomin10593/bookstore_utils-go/logger"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
 )
 
 const (
@@ -40,5 +40,6 @@ func init() {
 		panic(err)
 	}
 
-	log.Println("database successfully configured")
+	mysql.SetLogger(logger.GetLogger())
+	logger.Info("database successfully configured")
 }

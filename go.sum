@@ -28,6 +28,8 @@ github.com/istomin10593/bookstore_oauth-go v0.0.0-20221207174836-5fc8115a10d1 h1
 github.com/istomin10593/bookstore_oauth-go v0.0.0-20221207174836-5fc8115a10d1/go.mod h1:PbMRwjhlyH35ifIl3S5wFJz22YQO4bEfKRoQ6PV74C0=
 github.com/istomin10593/bookstore_utils-go v0.0.0-20221210145337-9cba49a4420d h1:xiySDh65qRsRvi8IndITn26UWjATNsnttQJsYLjqJ7g=
 github.com/istomin10593/bookstore_utils-go v0.0.0-20221210145337-9cba49a4420d/go.mod h1:/0NwB6yWZquxmPmRRJsnGgYTitXAVZmEXZXGK0Ue/MU=
+github.com/istomin10593/bookstore_utils-go v0.0.0-20221211233941-f942494a37ee h1:4x9zAZa1e9sVr/sNYLomYBPW0Qck+cJtP08GDi54mvE=
+github.com/istomin10593/bookstore_utils-go v0.0.0-20221211233941-f942494a37ee/go.mod h1:/0NwB6yWZquxmPmRRJsnGgYTitXAVZmEXZXGK0Ue/MU=
 github.com/joho/godotenv v1.4.0 h1:3l4+N6zfMWnkbPEXKng2o2/MR5mSwTrBih4ZEkkz1lg=
 github.com/joho/godotenv v1.4.0/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
 github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnrnM=
